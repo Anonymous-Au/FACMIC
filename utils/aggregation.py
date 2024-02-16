@@ -8,7 +8,7 @@ def communication(args, server_model, models, client_weights):
             for key in server_model.fea_attn.state_dict().keys():
                 if 'num_batches_tracked' in key or 'bert' in key:
                     server_model.fea_attn.state_dict()[key].data.copy_(
-                    models[3].fea_attn.state_dict()[key])
+                    models[3].fea_attn.state_dict()[key]) # model[3] means the index of global model, depending on your settings.
                 else:
                     temp = torch.zeros_like(server_model.fea_attn.state_dict()[
                                         key], dtype=torch.float32)
