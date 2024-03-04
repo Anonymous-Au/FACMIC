@@ -66,7 +66,7 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
                 len(image), dtype=torch.long, device=device)
 
                 cla_loss = (loss_img(logits_per_image, ground_truth) +
-                    loss_txt(logits_per_text, ground_truth))/3
+                    loss_txt(logits_per_text, ground_truth))/2
 
                 loss = cla_loss + loss_m
 
@@ -99,7 +99,7 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
                     len(image), dtype=torch.long, device=device)
 
                 loss = (loss_img(logits_per_image, ground_truth) +
-                        loss_txt(logits_per_text, ground_truth)) / 3
+                        loss_txt(logits_per_text, ground_truth)) / 2
                 train_loss_clf.update(loss.item())
                 # print(loss)
                 # loss_all += loss
@@ -149,7 +149,7 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
                 len(image), dtype=torch.long, device=device)
 
             loss = (loss_img(logits_per_image, ground_truth) +
-                        loss_txt(logits_per_text, ground_truth)) / 3
+                        loss_txt(logits_per_text, ground_truth)) /2
             train_loss_clf.update(loss.item())
             # MOON contrastive loss below, we refered the original codes, it needs [logits_per_image] to measure.
             # Model-Contrastive Federated Learning
@@ -193,7 +193,7 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
                 len(image), dtype=torch.long, device=device)
 
             loss = (loss_img(logits_per_image, ground_truth) +
-                        loss_txt(logits_per_text, ground_truth)) / 3
+                        loss_txt(logits_per_text, ground_truth)) / 2
             train_loss_clf.update(loss.item())
             loss.backward()
             convert_models_to_fp32(model)
@@ -229,7 +229,7 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
                 len(image), dtype=torch.long, device=device)
 
                 cla_loss = (loss_img(logits_per_image, ground_truth) +
-                    loss_txt(logits_per_text, ground_truth))/2
+                    loss_txt(logits_per_text, ground_truth))/  2
 
                 train_loss_clf.update(cla_loss.item())
                 optimizer.zero_grad()
