@@ -118,7 +118,38 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
                 optimizer.step()
                 clip.model.convert_weights(model)
         print("cla loss: ", train_loss_clf.avg, 'w_diff loss: ', train_loss_transfer.avg)
-    if args.method == 'moon':
+    if args.method == 'fedavg':
+        for batch in (data_loader):
+            i += 1
+            # if i == args.n_iter: # use it for BT, SC dataset, except Real.
+            #     break
+            image, text, label = batch
+            if len(text) > 1:
+                image = image.to(device)
+                text = text.to(device)
+                image_features = model.model.encode_image(image).float()
+                text_features = model.model.encode_text(text).float()
+                image_features = image_features / \
+                                 image_features.norm(dim=1, keepdim=True)
+                text_features = text_features / \
+                                text_features.norm(dim=1, keepdim=True)
+                logit_scale = model.model.logit_scale.exp()
+                logits_per_image = logit_scale * image_features @ text_features.t()
+                logits_per_text = logits_per_image.t()
+
+                ground_truth = torch.arange(
+                    len(image), dtype=torch.long, device=device)
+
+                loss = (loss_img(logits_per_image, ground_truth) +
+                        loss_txt(logits_per_text, ground_truth)) / 2
+                train_loss_clf.update(loss.item())
+                optimizer.zero_grad()
+                loss.backward()
+                convert_models_to_fp32(model)
+                optimizer.step()
+                clip.model.convert_weights(model)
+        print("cla loss: ", train_loss_clf.avg)
+        if args.method == 'moon':
         cnt = 0
         cos = torch.nn.CosineSimilarity(dim=-1)
         criterion = nn.CrossEntropyLoss()
@@ -142,21 +173,24 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
                              image_features_glo.norm(dim=1, keepdim=True)
             logit_scale = model.model.logit_scale.exp()
             logits_per_image = logit_scale * image_features @ text_features.t()
-            logits_per_image_glo = logit_scale * image_features_glo @ text_features.t()
+            # logits_per_image_glo = logit_scale * image_features_glo @ text_features_glo.t()
             logits_per_text = logits_per_image.t()
 
             ground_truth = torch.arange(
                 len(image), dtype=torch.long, device=device)
 
             loss = (loss_img(logits_per_image, ground_truth) +
-                        loss_txt(logits_per_text, ground_truth)) /2
+                        loss_txt(logits_per_text, ground_truth)) / 3
             train_loss_clf.update(loss.item())
             # MOON contrastive loss below, we refered the original codes, it needs [logits_per_image] to measure.
             # Model-Contrastive Federated Learning
-            posi = cos(logits_per_image, logits_per_image_glo)
+            posi = cos(image_features, image_features_glo)
             logits = posi.reshape(-1, 1)
             if args.step > 0:
                 image_features_pre = previous_nets.model.encode_image(image).float()
+                text_features_pre = previous_nets.model.encode_text(text).float()
+                image_features_pre = image_features_pre / \
+                                     image_features_pre.norm(dim=1, keepdim=True)
                 nega = cos(image_features, image_features_pre)
                 logits = torch.cat((logits, nega.reshape(-1, 1)), dim=1)
                 logits /= args.temp
