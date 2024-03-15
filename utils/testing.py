@@ -21,7 +21,7 @@ def test(args, model, data_loader, device):
     Label = []
     texts = model.labels
     text_features = clu.get_text_features_list(texts, model.model).float()
-    if args.method == 'ours' or 'fedclip':
+    if args.method == 'ours' or args.method == 'fedclip':
         with torch.no_grad():
             for batch in tqdm(data_loader):
                 image, _, label = batch
