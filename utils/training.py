@@ -180,7 +180,7 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
                 len(image), dtype=torch.long, device=device)
 
             loss = (loss_img(logits_per_image, ground_truth) +
-                        loss_txt(logits_per_text, ground_truth)) / 3
+                        loss_txt(logits_per_text, ground_truth)) / 2
             train_loss_clf.update(loss.item())
             # MOON contrastive loss below, we refered the original codes, it needs [logits_per_image] to measure.
             # Model-Contrastive Federated Learning
