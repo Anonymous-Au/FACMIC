@@ -61,7 +61,7 @@ class LMMDLoss(MMDLoss, LambdaSheduler):
         super(LMMDLoss, self).__init__(kernel_type, kernel_mul, kernel_num, fix_sigma, **kwargs)
         super(MMDLoss, self).__init__()
         # super(MMDLoss, self).__init__(gamma, max_iter, **kwargs)
-        self.num_class = 7
+        self.num_class = 4
 
 
     def forward(self, source, target, source_label, target_logits):
