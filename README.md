@@ -77,3 +77,20 @@ if i == args.n_iter:
 
 This can ensure the funciton will stop in right way. We marked these sentences in Line 32-33, Line 82-83, 124-125, Line 160-161, Line 211-212 and Line 241-242. Besides, you have to change train(args, model, train_test_loaders[client_idx], optimizers[client_idx], device, test_train[0], mmd_loss, server_model_pre, previous_nets[client_idx]) into train(args, model, train_loaders[client_idx], optimizers[client_idx], device, test_train[0], mmd_loss, server_model_pre, previous_nets[client_idx]) in main.py. Only for Real dataset, you have to use train_test_loaders[client_idx], and comment these statements mentioned above (e.g., Line 32-33).
 
+## dataset
+
+Here is a case study about the structure of our dataset as follows:
+
+```sh
+./dataset/BrainTumor/
+    client_0/
+      glioma_tumor/
+        gg (1).jpg
+            ...
+      meningioma_tumor/
+      no_tumor/
+      pituitary_tumor/
+    client_1/
+    client_2/
+    client_3/
+```
