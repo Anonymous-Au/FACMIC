@@ -87,7 +87,7 @@ This can ensure the funciton will stop in right way. We marked these sentences i
 Here is a case study about the structure of our dataset as follows:
 
 ```sh
-./dataset/BrainTumor/
+./data/BrainTumor/
     client_0/
       glioma_tumor/
         gg (1).jpg
@@ -99,4 +99,4 @@ Here is a case study about the structure of our dataset as follows:
     client_2/
     client_3/
 ```
-We provide a divided BrainTumor dataset to simplifiy your implementation. Note that there maybe exist small variations due to the seeds settings (numpy, torch, etc). We put this dataset inside dataset folder.
+We provide a divided BrainTumor dataset to simplifiy your implementation. Note that there maybe exist small variations due to the seeds settings (numpy, torch, etc). We put this dataset inside data folder.
