@@ -20,7 +20,7 @@ from adaptation import LMMDLoss
 if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', type=str, default='SkinCen')
+    parser.add_argument('--dataset', type=str, default='BrainTumor')
     parser.add_argument('--lr', type=float, default=5e-5, help='learning rate')
     parser.add_argument('--datapercent', type=float,
                         default=6e-1, help='data percent to use')
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     parser.add_argument('--seed', type=int, default=0, help='random seed')
     parser.add_argument('--n_clients', type=int, default=20)
     parser.add_argument('--n_iter', type=int, default=200)
-    parser.add_argument('--test_envs', type=int, nargs='+', default=[1])
+    parser.add_argument('--test_envs', type=int, nargs='+', default=[3])
     parser.add_argument('--beta1', type=float, default=0.9)
     parser.add_argument('--beta2', type=float, default=0.98)
     parser.add_argument('--eps', type=float, default=1e-6)
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     args.random_state = np.random.RandomState(1)
     set_random_seed(args.seed)
-    args.n_clients = 2
+    args.n_clients = 4
     args = img_param_init(args)
     os.makedirs('./data/', exist_ok=True)
     server_model = ClipModelat(
@@ -57,18 +57,18 @@ if __name__ == '__main__':
         args.dataset)(args, server_model)
     server_model.initdgatal(test_loaders[1])
     # For multi client
-    # l1, l2, l3 = len(train_test_loaders[0]), len(train_test_loaders[1]), len(train_test_loaders[2])
-    # l1 = l1 * args.batch
-    # l2 = l2 * args.batch
-    # l3 = l3 * args.batch
-    # l = []
-    # l.append(l1)
-    # l.append(l2)
-    # l.append(l3)
+    l1, l2, l3 = len(train_test_loaders[0]), len(train_test_loaders[1]), len(train_test_loaders[2])
+    l1 = l1 * args.batch
+    l2 = l2 * args.batch
+    l3 = l3 * args.batch
+    l = []
+    l.append(l1)
+    l.append(l2)
+    l.append(l3)
     client_num = len(test_loaders)
     sclient_num = client_num-len(args.test_envs)
-    # client_weights = [l[i]/(l1+l2+l3) for i in range(sclient_num)]
-    client_weights = [1.0]
+    client_weights = [l[i]/(l1+l2+l3) for i in range(sclient_num)]
+    # client_weights = [1.0]
     client_weights.append(0.33333333333)
     print(client_weights)
     models = [copy.deepcopy(server_model)for idx in range(client_num)]
@@ -84,10 +84,10 @@ if __name__ == '__main__':
     log = []
     log2 = []
     previous_nets = models
-    optimizers = [optim.Adam(params=[{'params': models[idx].parameters()}], lr=args.lr, betas=(
+    # optimizers = [optim.Adam(params=[{'params': models[idx].parameters()}], lr=args.lr, betas=(
+        # args.beta1, args.beta2), eps=args.eps, weight_decay=args.weight_decay) for idx in range(client_num)]
+    optimizers = [optim.Adam(params=[{'params': models[idx].fea_attn.parameters()}], lr=args.lr, betas=(
         args.beta1, args.beta2), eps=args.eps, weight_decay=args.weight_decay) for idx in range(client_num)]
-    # optimizers = [optim.Adam(params=[{'params': models[idx].fea_attn.parameters()}], lr=args.lr, betas=(
-    #     args.beta1, args.beta2), eps=args.eps, weight_decay=args.weight_decay) for idx in range(client_num)]
     for a_iter in range(args.iters): #All Epoch
         mmd_loss = LMMDLoss()
         for wi in range(args.wk_iters): #Each client local training epoch
@@ -99,7 +99,7 @@ if __name__ == '__main__':
                     pass
                 else: #Client i finish training procedure
                     train(
-                        args, model, train_test_loaders[client_idx], optimizers[client_idx], device, test_train[0], mmd_loss, server_model_pre, previous_nets[client_idx])
+                        args, model, train_loaders[client_idx], optimizers[client_idx], device, test_train[0], mmd_loss, server_model_pre, previous_nets[client_idx])
                     args.step += 1
 
 
