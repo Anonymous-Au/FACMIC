@@ -35,11 +35,21 @@ torchvision=0.14.1+cu117
 
 ### main.py 
 
+```sh
+
+```
+
 Run main.py to reproduce our results.
 
-For FACMIC and FedCLIP, you have to set arser.add_argument('--aggmode', type=str, default='avg') default as 'att';
+For FACMIC and FedCLIP, you have to set:
+```sh
+arser.add_argument('--aggmode', type=str, default='avg') # default as 'att'
+```
 
-For other methods, you have to set arser.add_argument('--aggmode', type=str, default='avg') default as 'avg'.
+For other methods, you have to set:
+```sh
+arser.add_argument('--aggmode', type=str, default='avg') # default as 'avg'
+```
 
 parser.add_argument('--test_envs', type=int, nargs='+', default=[1]) # default here is to set the global testing set, suppose there are 4 Clients, 1 here means it will treat Client 2 as the global while the rest as training clients.
 
@@ -71,7 +81,6 @@ training.py is the training function for all methods. For SC and BT dataset, you
 
 ```sh
 if i == args.n_iter:
-
     break
 ```
 
