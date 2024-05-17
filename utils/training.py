@@ -29,8 +29,8 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
         for batch, batch_t in zip(data_loader, testloader):
             i+=1
             # print(i)
-            # if i == args.n_iter: # use it for BT, SC dataset, except Real.
-            #     break
+            if i == args.n_iter: # use it for BT, SC dataset, except Real.
+                break
             image, text, label = batch
             image_t, text_t, label_t = batch_t
             if len(text) > 1:
@@ -79,8 +79,8 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
     if args.method == 'fedprox':
         for batch in (data_loader):
             i += 1
-            # if i == args.n_iter: # use it for BT, SC dataset, except Real.
-            #     break
+            if i == args.n_iter: # use it for BT, SC dataset, except Real.
+                break
             image, text, label = batch
             if len(text) > 1:
                 image = image.to(device)
@@ -103,14 +103,14 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
                 train_loss_clf.update(loss.item())
                 # print(loss)
                 # loss_all += loss
-                # if args.step > 0:
-                #     w_diff = torch.tensor(1e-10, device=device)
-                #     for w, w_t in zip(server_model.parameters(), model.parameters()):
-                #         w_diff += torch.pow(torch.norm(w - w_t), 2).float()  # model difference
-                #         # print(w_diff)
-                #     w_diff = torch.sqrt(w_diff)
-                #     train_loss_transfer.update((1e-2 / 2. * w_diff).item())
-                #     loss += 1e-2 / 2. * w_diff  # dif loss
+                if args.step > 0:
+                    w_diff = torch.tensor(1e-10, device=device)
+                    for w, w_t in zip(server_model.parameters(), model.parameters()):
+                        w_diff += torch.pow(torch.norm(w - w_t), 2).float()  # model difference
+                        # print(w_diff)
+                    w_diff = torch.sqrt(w_diff)
+                    train_loss_transfer.update((1e-2 / 2. * w_diff).item())
+                    loss += 1e-2 / 2. * w_diff  # dif loss
                     # print(loss)
                 optimizer.zero_grad()
                 loss.backward()
@@ -121,8 +121,8 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
     if args.method == 'fedavg':
         for batch in (data_loader):
             i += 1
-            # if i == args.n_iter: # use it for BT, SC dataset, except Real.
-            #     break
+            if i == args.n_iter: # use it for BT, SC dataset, except Real.
+                break
             image, text, label = batch
             if len(text) > 1:
                 image = image.to(device)
@@ -149,7 +149,7 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
                 optimizer.step()
                 clip.model.convert_weights(model)
         print("cla loss: ", train_loss_clf.avg)
-        if args.method == 'moon':
+    if args.method == 'moon':
         cnt = 0
         cos = torch.nn.CosineSimilarity(dim=-1)
         criterion = nn.CrossEntropyLoss()
@@ -157,8 +157,8 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
         for batch in data_loader:
             optimizer.zero_grad()
             i += 1
-            # if i == args.n_iter:
-            #     break
+            if i == args.n_iter:
+                break
             image, text, label = batch
             image = image.to(device)
             text = text.to(device)
@@ -208,8 +208,8 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
         for batch in data_loader:
             optimizer.zero_grad()
             i += 1
-            # if i == args.n_iter:
-            #     break
+            if i == args.n_iter:
+                break
             image, text, label = batch
             image = image.to(device)
             text = text.to(device)
@@ -238,8 +238,8 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
         for batch in data_loader:
             i+=1
             # print(i)
-            # if i == args.n_iter: # use it for BT, SC dataset, except Real.
-            #     break
+            if i == args.n_iter: # use it for BT, SC dataset, except Real.
+                break
             image, text, label = batch
             if len(text) > 1:
                 image = image.to(device)
