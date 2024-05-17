@@ -11,19 +11,19 @@ clip==1.0
 
 numpy==1.22.0
 
-opencv-python==4.5.4.60
+opencv-python==4.9.0.80
 
-openpyxl==3.0.5
+openpyxl==3.1.2
 
 Pillow==9.3.0
 
-scikit-image==0.17.2
+scikit-image==0.21.0
 
-scikit-learn==0.23.2
+scikit-learn==1.1.3
 
 scipy==1.10.0
 
-tqdm==4.62.3
+tqdm==4.66.1
 
 torch==1.13.1+cu117
 
