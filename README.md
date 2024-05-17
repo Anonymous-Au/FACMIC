@@ -27,4 +27,8 @@ scipy==1.10.0
 
 tqdm==4.62.3
 
+torch==1.13.1+cu117
+
+torchvision=0.14.1+cu117
+
 
