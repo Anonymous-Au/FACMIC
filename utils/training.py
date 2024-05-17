@@ -37,7 +37,7 @@ def train(args, model, data_loader, optimizer, device, testloader, mmd_loss, ser
                 text = text.to(device)
                 image_t = image_t.to(device)
                 image_features = model.model.encode_image(image).float()
-                # test_features = model.model.encode_image(image_t).float()
+                test_features = model.model.encode_image(image_t).float()
                 text_features = model.model.encode_text(text).float()
                 image_features_att = model.fea_attn(image_features)
                 image_features = torch.mul(image_features_att, image_features)
