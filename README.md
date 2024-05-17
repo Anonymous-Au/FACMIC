@@ -35,15 +35,11 @@ torchvision=0.14.1+cu117
 
 ### main.py 
 
-```sh
-
-```
-
 Run main.py to reproduce our results.
 
 For FACMIC and FedCLIP, you have to set:
 ```sh
-arser.add_argument('--aggmode', type=str, default='avg') # default as 'att'
+arser.add_argument('--aggmode', type=str, default='att') # default as 'att'
 ```
 
 For other methods, you have to set:
