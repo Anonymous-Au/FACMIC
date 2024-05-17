@@ -1,5 +1,4 @@
 import torch
-from adaptation import CORAL, LMMDLoss
 from utils.clip_util import AverageMeter
 import utils.clip_util as clu
 import torch.nn as nn
