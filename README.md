@@ -1,6 +1,8 @@
 # FACMIC
 Anonymous
 
+We provide codes based on BrainTumor experiments, you can simulate directly using main.py.
+
 ## Requirements
 
 We suggest you to use the following packages:
