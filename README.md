@@ -31,4 +31,8 @@ torch==1.13.1+cu117
 
 torchvision=0.14.1+cu117
 
+## How to use
 
+### main.py 
+
+Run main.py to reproduce our results.
