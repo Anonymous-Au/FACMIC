@@ -10,11 +10,21 @@ For convenience, you can use data_split.py to split any dataset into any sub fol
 We suggest you to use the following packages:
 
 clip==1.0
+
 numpy==1.22.0
+
 opencv-python==4.5.4.60
+
 openpyxl==3.0.5
+
 Pillow==9.3.0
+
 scikit-image==0.17.2
+
 scikit-learn==0.23.2
+
 scipy==1.10.0
+
 tqdm==4.62.3
+
+
