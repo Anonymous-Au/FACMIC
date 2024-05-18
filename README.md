@@ -102,4 +102,4 @@ Here is a case study about the structure of our dataset as follows:
     client_2/
     client_3/
 ```
-We provide a divided BrainTumor dataset to simplifiy your implementation. Note that there maybe exist small variations due to the seeds settings (numpy, torch, etc). We put this dataset inside data folder.
+We provide a divided BrainTumor dataset to simplifiy your implementation. Note that there maybe exist small performance variations due to the seeds settings (numpy, torch, etc). We put this dataset inside data folder.
